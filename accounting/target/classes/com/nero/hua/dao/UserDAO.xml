@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nero.hua.dao.UserDAO">
+
+  <resultMap id="BaseResultMap" type="com.nero.hua.bean.UserDO">
+    <id column="id" property="id" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="create_user_id" property="createUserId" />
+    <result column="update_user_id" property="updateUserId" />
+    <result column="user_id" property="userId" />
+    <result column="password" property="password" />
+    <result column="nick_name" property="nickName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, create_time, update_time, create_user_id, update_user_id, user_id, password, nick_name
+  </sql>
+
+  <select id="selectByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+      <include refid="Base_Column_List" />
+    from
+      user
+    where
+      user_id = #{userId}
+  </select>
+
+  <insert id="insertUser" parameterType="com.nero.hua.bean.UserDO" useGeneratedKeys="true" keyProperty="id" >
+    insert into
+      user
+      (create_time, update_time, create_user_id, update_user_id,
+      user_id, password, nick_name)
+    values
+      (#{userDO.createTime}, #{userDO.updateTime}, #{userDO.createUserId}, #{userDO.updateUserId},
+      #{userDO.userId}, #{userDO.password}, #{userDO.nickName})
+  </insert>
+
+</mapper>
