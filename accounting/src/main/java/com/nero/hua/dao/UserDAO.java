@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 
 public interface UserDAO {
 
-    UserDO selectByUserId(String userId);
+    UserDO selectByUserId(@Param("userId") String userId);
 
     Long insertUser(@Param("userDO") UserDO userDO);
 }
