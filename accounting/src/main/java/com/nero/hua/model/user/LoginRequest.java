@@ -14,10 +14,10 @@ public class LoginRequest {
     @NotNull(message = "账号不能为空")
     @NotBlank(message = "账号不能为空")
     @Length(max = 12, message = "账号字长不能超过12")
-    String userId;
+    private String userId;
 
     @NotNull(message = "密码不能为空")
     @NotBlank(message = "密码不能为空")
     @Length(max = 12, message = "密码字长不能超过12")
-    String password;
+    private String password;
 }
