@@ -14,13 +14,13 @@ public class RegisterRequest {
     @NotNull(message = "账号不能为空")
     @NotBlank(message = "账号不能为空")
     @Length(max = 12, message = "账号字长不能超过12")
-    String userId;
+    private String userId;
 
     @NotNull(message = "密码不能为空")
     @NotBlank(message = "密码不能为空")
     @Length(max = 12, message = "密码字长不能超过12")
-    String password;
+    private String password;
 
     @Length(max = 50, message = "密码字长不能超过50")
-    String nickName;
+    private String nickName;
 }
