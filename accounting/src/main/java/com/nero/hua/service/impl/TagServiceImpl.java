@@ -2,6 +2,7 @@ package com.nero.hua.service.impl;
 
 import com.nero.hua.bean.TagDO;
 import com.nero.hua.convert.TagConvert;
+import com.nero.hua.dao.AccountingDAO;
 import com.nero.hua.dao.TagDAO;
 import com.nero.hua.model.tag.TagAddRequest;
 import com.nero.hua.model.tag.TagResponse;
@@ -12,6 +13,9 @@ public class TagServiceImpl implements TagService {
 
     @Autowired
     TagDAO tagDAO;
+
+    @Autowired
+    AccountingDAO accountingDAO;
 
     @Override
     public Long add(TagAddRequest tagAddRequest) {
