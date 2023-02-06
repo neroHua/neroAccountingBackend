@@ -1,8 +1,10 @@
 package com.nero.hua.service.impl;
 
 import com.nero.hua.bean.AccountingDO;
+import com.nero.hua.bean.AccountingTagDO;
 import com.nero.hua.bean.UserDO;
 import com.nero.hua.convert.AccountingConvert;
+import com.nero.hua.convert.AccountingTagConvert;
 import com.nero.hua.dao.AccountingDAO;
 import com.nero.hua.dao.AccountingTagDAO;
 import com.nero.hua.dao.UserDAO;
@@ -12,6 +14,7 @@ import com.nero.hua.model.accounting.AccountingResponse;
 import com.nero.hua.model.base.BasePageResponse;
 import com.nero.hua.service.AccountingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -28,6 +31,7 @@ public class AccountingServiceImpl implements AccountingService {
     private UserDAO userDAO;
 
     @Override
+    @Transactional
     public Long add(AccountingAddRequest accountingAddRequest, String userId) {
         UserDO userDO = userDAO.selectByUserId(userId);
         AccountingDO accountingDO = AccountingConvert.convertRequestToDO(accountingAddRequest, userDO.getId());
@@ -39,7 +43,8 @@ public class AccountingServiceImpl implements AccountingService {
         }
 
         for (long tagId : tagIdList) {
-            // todo add some accountTags
+            AccountingTagDO accountingTagDO = AccountingTagConvert.convertDO(userDO.getId(), accountingDOId, tagId);
+            accountingTagDAO.insertAccountingTag(accountingTagDO);
         }
 
         return accountingDOId;
@@ -48,7 +53,6 @@ public class AccountingServiceImpl implements AccountingService {
     @Override
     public AccountingResponse get(Long id) {
         AccountingDO accountingDO = accountingDAO.selectById(id);
-        // todo find tagList
         return AccountingConvert.convertDOToResponse(accountingDO);
     }
 
