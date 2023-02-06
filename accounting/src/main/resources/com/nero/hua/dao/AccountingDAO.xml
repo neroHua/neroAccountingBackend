@@ -21,13 +21,6 @@
     bill_money, description, review_description, valuable
   </sql>
 
-  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from accounting
-    where id = #{id}
-  </select>
-
   <insert id="insertAccounting" parameterType="com.nero.hua.bean.AccountingDO">
     insert into
       accounting
@@ -41,4 +34,72 @@
       #{accountingDO.billCreateTime}, #{accountingDO.billMoney}, #{accountingDO.description},
       #{accountingDO.reviewDescription}, #{accountingDO.valuable})
   </insert>
+
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from
+      accounting
+    where
+      id = #{id}
+  </select>
+
+  <select id="selectCountByPage" resultType="java.lang.Long">
+    select
+      count(1)
+    from
+      accounting
+    where
+      <include refid="page_common_condition" />
+    order by
+      create_time
+    desc
+  </select>
+
+  <sql id="page_common_condition">
+    1 = 1
+    <if test="accountingPageRequest.keyword != null">
+      and (review_description like #{accountingPageRequest.keyword} or description like #{accountingPageRequest.keyword})
+    </if>
+    <if test="accountingPageRequest.billCreateTimeMin != null">
+      <![CDATA[
+        and bill_create_time >= #{accountingPageRequest.billCreateTimeMin}
+      ]]>
+    </if>
+    <if test="accountingPageRequest.billCreateTimeMax != null">
+      <![CDATA[
+        and bill_create_time <= #{accountingPageRequest.billCreateTimeMax}
+      ]]>
+    </if>
+    <if test="accountingPageRequest.billMoneyMin != null">
+      <![CDATA[
+        and bill_money >= #{accountingPageRequest.billMoneyMin}
+      ]]>
+    </if>
+    <if test="accountingPageRequest.billMoneyMax != null">
+      <![CDATA[
+        and bill_money <= #{accountingPageRequest.billMoneyMax}
+      ]]>
+    </if>
+    <if test="accountingPageRequest.valuable != null">
+      <![CDATA[
+        and valuable = #{accountingPageRequest.valuable}
+      ]]>
+    </if>
+  </sql>
+
+  <select id="selectListByPage" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from
+      accounting
+    where
+      <include refid="page_common_condition" />
+    order by
+      create_time
+    desc
+    limit
+      #{begin}, #{accountingPageRequest.pageSize}
+  </select>
+
 </mapper>
