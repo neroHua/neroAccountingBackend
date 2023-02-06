@@ -19,13 +19,6 @@
     parent_id
   </sql>
 
-  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from tag
-    where id = #{id}
-  </select>
-
   <insert id="insertTag" parameterType="com.nero.hua.bean.TagDO" useGeneratedKeys="true" keyProperty="id"  >
     insert into
       tag
@@ -38,4 +31,59 @@
       #{tagDO.name}, #{tagDO.description}, #{tagDO.parentId}
       )
   </insert>
+
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from
+      tag
+    where
+      id = #{id}
+  </select>
+
+  <select id="selectCountByPage" resultType="java.lang.Long">
+    select
+      count(1)
+    from
+      tag
+    where
+      <include refid="page_common_condition" />
+    order by
+      create_time
+    desc
+  </select>
+
+  <sql id="page_common_condition">
+    1 = 1
+    <if test="tagPageRequest.keyword != null">
+      and (code like #{tagPageRequest.keyword} or name like #{tagPageRequest.keyword} or description like #{tagPageRequest.keyword})
+    </if>
+    <if test="tagPageRequest.codeLike != null">
+      and code like #{tagPageRequest.codeLike}
+    </if>
+    <if test="tagPageRequest.codeEqual != null">
+      and code like #{tagPageRequest.codeEqual}
+    </if>
+    <if test="tagPageRequest.nameLike != null">
+      and code like #{tagPageRequest.nameLike}
+    </if>
+    <if test="tagPageRequest.nameEqual!= null">
+      and code like #{tagPageRequest.nameEqual}
+    </if>
+  </sql>
+
+  <select id="selectListByPage" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from
+      tag
+    where
+      <include refid="page_common_condition" />
+    order by
+      create_time
+    desc
+    limit
+      #{begin}, #{tagPageRequest.pageSize}
+  </select>
+
 </mapper>
