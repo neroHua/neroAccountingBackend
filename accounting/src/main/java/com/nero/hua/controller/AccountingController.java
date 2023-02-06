@@ -1,12 +1,17 @@
 package com.nero.hua.controller;
 
 import com.nero.hua.model.accounting.AccountingAddRequest;
+import com.nero.hua.model.accounting.AccountingPageRequest;
 import com.nero.hua.model.accounting.AccountingResponse;
+import com.nero.hua.model.base.BasePageResponse;
 import com.nero.hua.model.base.BaseResponse;
 import com.nero.hua.service.AccountingService;
+import com.nero.hua.util.LoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("accounting")
@@ -16,8 +21,9 @@ public class AccountingController {
     AccountingService accountingService;
 
     @PostMapping
-    public BaseResponse<Long> add(@RequestBody @Validated AccountingAddRequest accountingAddRequest) {
-        Long id = accountingService.add(accountingAddRequest);
+    public BaseResponse<Long> add(@RequestBody @Validated AccountingAddRequest accountingAddRequest, HttpServletRequest httpServletRequest) {
+        String userId = LoginUtil.parseUserIdFromHttpServletRequest(httpServletRequest);
+        Long id = accountingService.add(accountingAddRequest, userId);
 
         return new BaseResponse<>(id);
     }
@@ -27,6 +33,12 @@ public class AccountingController {
         AccountingResponse accountingResponse = accountingService.get(id);
 
         return new BaseResponse<>(accountingResponse);
+    }
+
+    @GetMapping(value = "/list")
+    public BaseResponse<BasePageResponse<AccountingResponse>> selectAccountingByPage(@Validated AccountingPageRequest accountingPageRequest) {
+        BasePageResponse<AccountingResponse> accountingPageResponse = accountingService.selectByPage(accountingPageRequest);
+        return new BaseResponse(accountingPageResponse);
     }
 
 }
