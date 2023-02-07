@@ -19,12 +19,14 @@ import com.nero.hua.model.base.BasePageResponse;
 import com.nero.hua.model.tag.TagResponse;
 import com.nero.hua.service.AccountingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class AccountingServiceImpl implements AccountingService {
 
     @Autowired
