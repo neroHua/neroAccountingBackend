@@ -32,6 +32,14 @@
       )
   </insert>
 
+  <delete id="deleteById" parameterType="java.lang.Long">
+    delete
+    from
+      tag
+    where
+      id = #{id}
+  </delete>
+
   <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
       <include refid="Base_Column_List" />
