@@ -30,14 +30,14 @@ public class TagController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public BaseResponse<Long> add(@PathVariable(name = "id") Long id) {
+    public BaseResponse<Long> delete(@PathVariable(name = "id") Long id) {
         Long changeCount = tagService.deleteById(id);
 
         return new BaseResponse<>(changeCount);
     }
 
     @PutMapping
-    public BaseResponse<Long> add(@RequestBody @Validated TagUpdateRequest tagUpdateRequest, HttpServletRequest httpServletRequest) {
+    public BaseResponse<Long> update(@RequestBody @Validated TagUpdateRequest tagUpdateRequest, HttpServletRequest httpServletRequest) {
         String userId = LoginUtil.parseUserIdFromHttpServletRequest(httpServletRequest);
         Long updateCount = tagService.updateById(tagUpdateRequest, userId);
 
