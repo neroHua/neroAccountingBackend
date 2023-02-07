@@ -1,60 +1,62 @@
-package com.nero.hua.controller;
+package com.nero.hua.service.impl;
 
-import com.nero.hua.model.base.BasePageResponse;
-import com.nero.hua.model.base.BaseResponse;
-import com.nero.hua.model.tag.TagAddRequest;
-import com.nero.hua.model.tag.TagPageRequest;
-import com.nero.hua.model.tag.TagResponse;
-import com.nero.hua.model.tag.TagUpdateRequest;
-import com.nero.hua.service.TagService;
+import com.nero.hua.bean.UserDO;
+import com.nero.hua.convert.UserConvert;
+import com.nero.hua.dao.UserDAO;
+import com.nero.hua.enumeration.LoginEnumeration;
+import com.nero.hua.enumeration.RegisterEnumeration;
+import com.nero.hua.exception.LoginException;
+import com.nero.hua.exception.RegisterException;
+import com.nero.hua.model.user.LoginRequest;
+import com.nero.hua.model.user.RegisterRequest;
+import com.nero.hua.model.user.UserInformationResponse;
+import com.nero.hua.service.UserService;
 import com.nero.hua.util.LoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-
-@RestController
-@RequestMapping("tag")
-public class TagController {
+@Service
+public class UserServiceImpl implements UserService {
 
     @Autowired
-    TagService tagService;
+    UserDAO userDAO;
 
-    @PostMapping
-    public BaseResponse<Long> add(@RequestBody @Validated TagAddRequest tagAddRequest, HttpServletRequest httpServletRequest) {
-        String userId = LoginUtil.parseUserIdFromHttpServletRequest(httpServletRequest);
-        Long id = tagService.add(tagAddRequest, userId);
+    @Override
+    public Boolean register(RegisterRequest registerRequest) {
+        UserDO userDOExist = userDAO.selectByUserId(registerRequest.getUserId());
+        if (null != userDOExist) {
+            throw new RegisterException(RegisterEnumeration.DUPLICATED_USER_ID);
+        }
 
-        return new BaseResponse<>(id);
+        UserDO userDO = UserConvert.convertRequestToDO(registerRequest);
+        userDAO.insertUser(userDO);
+
+        return Boolean.TRUE;
     }
 
-    @DeleteMapping(value = "/{id}")
-    public BaseResponse<Long> add(@PathVariable(name = "id") Long id) {
-        Long changeCount = tagService.deleteById(id);
+    @Override
+    public String login(LoginRequest loginRequest) {
+        UserDO userDO = userDAO.selectByUserId(loginRequest.getUserId());
 
-        return new BaseResponse<>(changeCount);
+        if (null == userDO) {
+            throw new LoginException(LoginEnumeration.USER_NOT_FOUND);
+        }
+
+        if (!userDO.getPassword().equals(loginRequest.getPassword())) {
+            throw new LoginException(LoginEnumeration.PASSWORD_NOT_RIGHT);
+        }
+
+        return LoginUtil.createToken(UserConvert.convertDOToResponse(userDO));
     }
 
-    @PutMapping
-    public BaseResponse<Long> add(@RequestBody @Validated TagUpdateRequest tagUpdateRequest, HttpServletRequest httpServletRequest) {
-        String userId = LoginUtil.parseUserIdFromHttpServletRequest(httpServletRequest);
-        Long updateCount = tagService.updateById(tagUpdateRequest, userId);
+    @Override
+    public UserInformationResponse getUserInformation(String userId) {
+        UserDO userDO = userDAO.selectByUserId(userId);
+        if (null == userDO) {
+            throw new LoginException(LoginEnumeration.USER_NOT_FOUND);
+        }
 
-        return new BaseResponse<>(updateCount);
-    }
-
-    @GetMapping(value = "/detail/{id}")
-    public BaseResponse<TagResponse> get(@PathVariable(name = "id") Long id) {
-        TagResponse tagResponse = tagService.get(id);
-
-        return new BaseResponse<>(tagResponse);
-    }
-
-    @GetMapping(value = "/list")
-    public BaseResponse<BasePageResponse<TagResponse>> selectTagByPage(@Validated TagPageRequest tagPageRequest) {
-        BasePageResponse<TagResponse> tagPageResponse = tagService.selectByPage(tagPageRequest);
-        return new BaseResponse(tagPageResponse);
+        return UserConvert.convertDOToResponse(userDO);
     }
 
 }
