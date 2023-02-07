@@ -40,6 +40,26 @@
       id = #{id}
   </delete>
 
+  <update id="updateById" parameterType="com.nero.hua.bean.TagDO">
+    update
+      tag
+    set
+      <if test="tagDO.code != null">
+        code = #{tagDO.code},
+      </if>
+      <if test="tagDO.name != null">
+        name = #{tagDO.name},
+      </if>
+      <if test="tagDO.description != null">
+        description = #{tagDO.description},
+      </if>
+      <if test="tagDO.parentId != null">
+        parent_id = #{tagDO.parentId},
+      </if>
+    where
+      id = #{tagDO.id}
+  </update>
+
   <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
       <include refid="Base_Column_List" />
