@@ -15,9 +15,11 @@ import com.nero.hua.model.tag.TagResponse;
 import com.nero.hua.model.tag.TagUpdateRequest;
 import com.nero.hua.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class TagServiceImpl implements TagService {
 
     @Autowired
