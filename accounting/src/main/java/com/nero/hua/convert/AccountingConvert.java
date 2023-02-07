@@ -3,6 +3,7 @@ package com.nero.hua.convert;
 import com.nero.hua.bean.AccountingDO;
 import com.nero.hua.model.accounting.AccountingAddRequest;
 import com.nero.hua.model.accounting.AccountingResponse;
+import com.nero.hua.model.accounting.AccountingUpdateRequest;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -25,6 +26,23 @@ public class AccountingConvert {
 
         accountingDO.setReviewDescription(accountingAddRequest.getReviewDescription());
         accountingDO.setValuable(accountingAddRequest.getValuable());
+
+        return accountingDO;
+    }
+
+    public static AccountingDO convertRequestToDO(AccountingUpdateRequest accountingUpdateRequest, Long userId) {
+        AccountingDO accountingDO = new AccountingDO();
+
+        accountingDO.setId(accountingUpdateRequest.getId());
+        accountingDO.setUpdateUserId(userId);
+        accountingDO.setUpdateTime(new Date());
+
+        accountingDO.setBillCreateTime(accountingUpdateRequest.getBillCreateTime());
+        accountingDO.setBillMoney(accountingUpdateRequest.getBillMoney());
+        accountingDO.setDescription(accountingUpdateRequest.getDescription());
+        accountingDO.setReviewDescription(accountingUpdateRequest.getReviewDescription());
+
+        accountingDO.setValuable(accountingUpdateRequest.getValuable());
 
         return accountingDO;
     }
