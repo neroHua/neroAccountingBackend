@@ -35,13 +35,22 @@
       #{accountingTagDO.tagId})
   </insert>
 
-  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectListByAccountingId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
       <include refid="Base_Column_List" />
     from
       accounting_tag
     where
       accounting_id = #{accountingId}
+  </select>
+
+  <select id="selectCountByTagId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select
+      count(1)
+    from
+      accounting_tag
+    where
+      tag_id = #{tagId}
   </select>
 
 </mapper>
