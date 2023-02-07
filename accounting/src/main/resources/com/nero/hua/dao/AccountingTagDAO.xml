@@ -34,4 +34,14 @@
       #{accountingTagDO.createUserId}, #{accountingTagDO.updateUserId}, #{accountingTagDO.accountingId},
       #{accountingTagDO.tagId})
   </insert>
+
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+    from
+      accounting_tag
+    where
+      accounting_id = #{accountingId}
+  </select>
+
 </mapper>
