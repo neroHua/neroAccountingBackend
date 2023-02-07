@@ -9,6 +9,8 @@ public interface AccountingTagDAO {
 
     Long insertAccountingTag(@Param("accountingTagDO") AccountingTagDO accountingTagDO);
 
+    void deleteByAccountingId(@Param("accountingId") Long id);
+
     AccountingTagDO selectById(@Param("id") Long id);
 
     List<AccountingTagDO> selectListByAccountingId(@Param("accountingId") Long accountingId);
