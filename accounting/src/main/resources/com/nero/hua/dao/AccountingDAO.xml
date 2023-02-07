@@ -35,6 +35,43 @@
       #{accountingDO.reviewDescription}, #{accountingDO.valuable})
   </insert>
 
+  <delete id="deleteById">
+    delete from
+      accounting
+    where
+      id = #{id}
+  </delete>
+
+  <update id="updateById" parameterType="com.nero.hua.bean.AccountingDO">
+    update
+      accounting
+    <set>
+      <if test="accountingDO.updateUserId != null">
+        update_user_id = #{accountingDO.updateUserId},
+      </if>
+      <if test="accountingDO.updateTime != null">
+        update_time = #{accountingDO.updateTime},
+      </if>
+      <if test="accountingDO.billCreateTime != null">
+        bill_create_time = #{accountingDO.billCreateTime},
+      </if>
+      <if test="accountingDO.billMoney != null">
+        bill_money = #{accountingDO.billMoney},
+      </if>
+      <if test="accountingDO.description != null">
+        description = #{accountingDO.description},
+      </if>
+      <if test="accountingDO.reviewDescription != null">
+        review_description = #{accountingDO.reviewDescription},
+      </if>
+      <if test="accountingDO.valuable != null" >
+        valuable = #{accountingDO.valuable},
+      </if>
+    </set>
+    where
+      id = #{accountingDO.id}
+  </update>
+
   <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
       <include refid="Base_Column_List" />
