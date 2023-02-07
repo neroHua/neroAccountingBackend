@@ -7,11 +7,15 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface TagDAO {
+
     Long insertTag(@Param("tagDO") TagDO tagDO);
+
+    void deleteById(Long id);
 
     TagDO selectById(@Param("id") Long id);
 
     Long selectCountByPage(@Param("tagPageRequest") TagPageRequest tagPageRequest);
 
     List<TagDO> selectListByPage(@Param("tagPageRequest") TagPageRequest tagPageRequest, @Param("begin") Long calculateBegin);
+
 }
