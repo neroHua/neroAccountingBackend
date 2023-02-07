@@ -12,6 +12,7 @@ import com.nero.hua.model.base.BasePageResponse;
 import com.nero.hua.model.tag.TagAddRequest;
 import com.nero.hua.model.tag.TagPageRequest;
 import com.nero.hua.model.tag.TagResponse;
+import com.nero.hua.model.tag.TagUpdateRequest;
 import com.nero.hua.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -36,14 +37,21 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public long deleteById(Long id) {
         long useCount = accountingTagDAO.selectCountByTagId(id);
 
         if (useCount > 0) {
             throw new TagException(TagEnumeration.TAG_IN_USE_CAN_NOT_BE_DELETED);
         }
 
-        tagDAO.deleteById(id);
+        return tagDAO.deleteById(id);
+    }
+
+    @Override
+    public long updateById(TagUpdateRequest tagUpdateRequest, String userId) {
+        UserDO userDO = userDAO.selectByUserId(userId);
+        TagDO tagDO = TagConvert.convertRequestToDO(tagUpdateRequest, userDO.getId());
+        return tagDAO.updateById(tagDO);
     }
 
     @Override
