@@ -35,6 +35,13 @@
       #{accountingTagDO.tagId})
   </insert>
 
+  <delete id="deleteByAccountingId">
+    delete from
+      accounting_tag
+    where
+      accounting_id = #{accountingId}
+  </delete>
+
   <select id="selectListByAccountingId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
       <include refid="Base_Column_List" />
