@@ -32,8 +32,15 @@ public class UserDAOTest {
         userDO.setUserId("testCase001");
         userDO.setPassword("abc123");
         userDO.setNickName("nickName");
-        Long aLong = userDAO.insertUser(userDO);
+        long aLong = userDAO.insertUser(userDO);
         Assert.assertTrue("插入用户应该成功", aLong > 0);
+
+        UserDO userDO1 = userDAO.selectByUserId(userDO.getUserId());
+        Assert.assertEquals("插入前后字段应该相等", userDO1.getCreateUserId(), userDO.getCreateUserId());
+        Assert.assertEquals("插入前后字段应该相等", userDO1.getUpdateUserId(), userDO.getUpdateUserId());
+        Assert.assertEquals("插入前后字段应该相等", userDO1.getUserId(), userDO.getUserId());
+        Assert.assertEquals("插入前后字段应该相等", userDO1.getNickName(), userDO.getNickName());
+        Assert.assertEquals("插入前后字段应该相等", userDO1.getPassword(), userDO.getPassword());
     }
 
     @Test
