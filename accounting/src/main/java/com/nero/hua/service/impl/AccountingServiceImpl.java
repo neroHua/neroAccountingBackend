@@ -11,10 +11,7 @@ import com.nero.hua.dao.AccountingDAO;
 import com.nero.hua.dao.AccountingTagDAO;
 import com.nero.hua.dao.TagDAO;
 import com.nero.hua.dao.UserDAO;
-import com.nero.hua.model.accounting.AccountingAddRequest;
-import com.nero.hua.model.accounting.AccountingPageRequest;
-import com.nero.hua.model.accounting.AccountingResponse;
-import com.nero.hua.model.accounting.AccountingTagListRequest;
+import com.nero.hua.model.accounting.*;
 import com.nero.hua.model.base.BasePageResponse;
 import com.nero.hua.model.tag.TagResponse;
 import com.nero.hua.service.AccountingService;
@@ -59,6 +56,19 @@ public class AccountingServiceImpl implements AccountingService {
         }
 
         return accountingDOId;
+    }
+
+    @Override
+    public Long deleteById(Long id) {
+        accountingTagDAO.deleteByAccountingId(id);
+        return accountingDAO.deleteById(id);
+    }
+
+    @Override
+    public Long updateById(AccountingUpdateRequest accountingUpdateRequest, String userId) {
+        UserDO userDO = userDAO.selectByUserId(userId);
+        AccountingDO accountingDO = AccountingConvert.convertRequestToDO(accountingUpdateRequest, userDO.getId());
+        return accountingDAO.updateById(accountingDO);
     }
 
     @Override
