@@ -1,9 +1,6 @@
 package com.nero.hua.controller;
 
-import com.nero.hua.model.accounting.AccountingAddRequest;
-import com.nero.hua.model.accounting.AccountingPageRequest;
-import com.nero.hua.model.accounting.AccountingResponse;
-import com.nero.hua.model.accounting.AccountingTagListRequest;
+import com.nero.hua.model.accounting.*;
 import com.nero.hua.model.base.BasePageResponse;
 import com.nero.hua.model.base.BaseResponse;
 import com.nero.hua.model.tag.TagResponse;
@@ -29,6 +26,21 @@ public class AccountingController {
         Long id = accountingService.add(accountingAddRequest, userId);
 
         return new BaseResponse<>(id);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public BaseResponse<Long> delete(@PathVariable(name = "id") Long id) {
+        Long changeCount = accountingService.deleteById(id);
+
+        return new BaseResponse<>(changeCount);
+    }
+
+    @PutMapping
+    public BaseResponse<Long> update(@RequestBody @Validated AccountingUpdateRequest accountingUpdateRequest, HttpServletRequest httpServletRequest) {
+        String userId = LoginUtil.parseUserIdFromHttpServletRequest(httpServletRequest);
+        Long updateCount = accountingService.updateById(accountingUpdateRequest, userId);
+
+        return new BaseResponse<>(updateCount);
     }
 
     @GetMapping(value = "/detail/{id}")
