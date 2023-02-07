@@ -1,12 +1,14 @@
 package com.nero.hua.dao;
 
 import com.nero.hua.bean.UserDO;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
 
 import java.util.Date;
 
@@ -27,17 +29,17 @@ public class UserDAOTest {
         userDO.setCreateUserId(0L);
         userDO.setUpdateUserId(0L);
 
-
         userDO.setUserId("testCase001");
         userDO.setPassword("abc123");
         userDO.setNickName("nickName");
-        userDAO.insertUser(userDO);
+        Long aLong = userDAO.insertUser(userDO);
+        Assert.assertTrue("插入用户应该成功", aLong > 0);
     }
 
     @Test
     public void testSelectByUserId() {
-//        UserDO userDO = userDAO.selectByUserId("testUser001");
-//        Assert.notNull(userDO, "用户1不应该为null");
+        UserDO userDO = userDAO.selectByUserId("admin");
+        Assert.assertNotNull( "应该找到admin用户", userDO);
     }
 
 }
