@@ -28,6 +28,13 @@ public class TagController {
         return new BaseResponse<>(id);
     }
 
+    @DeleteMapping(value = "/{id}")
+    public BaseResponse<Boolean> add(@PathVariable(name = "id") Long id) {
+        tagService.deleteById(id);
+
+        return new BaseResponse<>(Boolean.TRUE);
+    }
+
     @GetMapping(value = "/detail/{id}")
     public BaseResponse<TagResponse> get(@PathVariable(name = "id") Long id) {
         TagResponse tagResponse = tagService.get(id);
