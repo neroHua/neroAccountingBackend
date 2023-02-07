@@ -1,21 +1,21 @@
-package com.nero.hua.dao;
+package com.nero.hua.service;
 
-import com.nero.hua.bean.TagDO;
+import com.nero.hua.model.base.BasePageResponse;
+import com.nero.hua.model.tag.TagAddRequest;
 import com.nero.hua.model.tag.TagPageRequest;
-import org.apache.ibatis.annotations.Param;
+import com.nero.hua.model.tag.TagResponse;
+import com.nero.hua.model.tag.TagUpdateRequest;
 
-import java.util.List;
+public interface TagService {
 
-public interface TagDAO {
+    Long add(TagAddRequest tagAddRequest, String userId);
 
-    Long insertTag(@Param("tagDO") TagDO tagDO);
+    long deleteById(Long id);
 
-    void deleteById(Long id);
+    long updateById(TagUpdateRequest tagUpdateRequest, String userId);
 
-    TagDO selectById(@Param("id") Long id);
+    TagResponse get(Long id);
 
-    Long selectCountByPage(@Param("tagPageRequest") TagPageRequest tagPageRequest);
-
-    List<TagDO> selectListByPage(@Param("tagPageRequest") TagPageRequest tagPageRequest, @Param("begin") Long calculateBegin);
+    BasePageResponse<TagResponse> selectByPage(TagPageRequest tagPageRequest);
 
 }
