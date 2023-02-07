@@ -5,6 +5,7 @@ import com.nero.hua.model.base.BaseResponse;
 import com.nero.hua.model.tag.TagAddRequest;
 import com.nero.hua.model.tag.TagPageRequest;
 import com.nero.hua.model.tag.TagResponse;
+import com.nero.hua.model.tag.TagUpdateRequest;
 import com.nero.hua.service.TagService;
 import com.nero.hua.util.LoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,18 @@ public class TagController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public BaseResponse<Boolean> add(@PathVariable(name = "id") Long id) {
-        tagService.deleteById(id);
+    public BaseResponse<Long> add(@PathVariable(name = "id") Long id) {
+        Long changeCount = tagService.deleteById(id);
 
-        return new BaseResponse<>(Boolean.TRUE);
+        return new BaseResponse<>(changeCount);
+    }
+
+    @PutMapping
+    public BaseResponse<Long> add(@RequestBody @Validated TagUpdateRequest tagUpdateRequest, HttpServletRequest httpServletRequest) {
+        String userId = LoginUtil.parseUserIdFromHttpServletRequest(httpServletRequest);
+        Long updateCount = tagService.updateById(tagUpdateRequest, userId);
+
+        return new BaseResponse<>(updateCount);
     }
 
     @GetMapping(value = "/detail/{id}")
