@@ -9,6 +9,8 @@ public interface TagService {
 
     Long add(TagAddRequest tagAddRequest, String userId);
 
+    void deleteById(Long id);
+
     TagResponse get(Long id);
 
     BasePageResponse<TagResponse> selectByPage(TagPageRequest tagPageRequest);
