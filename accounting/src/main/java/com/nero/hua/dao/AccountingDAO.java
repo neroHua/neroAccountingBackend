@@ -7,7 +7,12 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface AccountingDAO {
+
     Long insertAccounting(@Param("accountingDO") AccountingDO accountingDO);
+
+    Long deleteById(@Param("id") Long id);
+
+    Long updateById(@Param("accountingDO") AccountingDO accountingDO);
 
     AccountingDO selectById(@Param("id") Long id);
 
