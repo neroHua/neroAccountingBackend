@@ -43,7 +43,13 @@
   <update id="updateById" parameterType="com.nero.hua.bean.TagDO">
     update
       tag
-    set
+    <set>
+      <if test="tagDO.updateUserId != null">
+        update_user_id = #{tagDO.updateUserId},
+      </if>
+      <if test="tagDO.updateTime != null">
+        update_time = #{tagDO.updateTime},
+      </if>
       <if test="tagDO.code != null">
         code = #{tagDO.code},
       </if>
@@ -53,9 +59,10 @@
       <if test="tagDO.description != null">
         description = #{tagDO.description},
       </if>
-      <if test="tagDO.parentId != null">
+      <if test="tagDO.parentId != null" >
         parent_id = #{tagDO.parentId},
       </if>
+    </set>
     where
       id = #{tagDO.id}
   </update>
