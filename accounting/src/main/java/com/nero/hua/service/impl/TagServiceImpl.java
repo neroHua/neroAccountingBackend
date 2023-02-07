@@ -3,9 +3,11 @@ package com.nero.hua.service.impl;
 import com.nero.hua.bean.TagDO;
 import com.nero.hua.bean.UserDO;
 import com.nero.hua.convert.TagConvert;
-import com.nero.hua.dao.AccountingDAO;
+import com.nero.hua.dao.AccountingTagDAO;
 import com.nero.hua.dao.TagDAO;
 import com.nero.hua.dao.UserDAO;
+import com.nero.hua.enumeration.TagEnumeration;
+import com.nero.hua.exception.TagException;
 import com.nero.hua.model.base.BasePageResponse;
 import com.nero.hua.model.tag.TagAddRequest;
 import com.nero.hua.model.tag.TagPageRequest;
@@ -21,7 +23,7 @@ public class TagServiceImpl implements TagService {
     TagDAO tagDAO;
 
     @Autowired
-    AccountingDAO accountingDAO;
+    AccountingTagDAO accountingTagDAO;
 
     @Autowired
     UserDAO userDAO;
@@ -31,6 +33,17 @@ public class TagServiceImpl implements TagService {
         UserDO userDO = userDAO.selectByUserId(userId);
         TagDO tagDO = TagConvert.convertRequestToDO(tagAddRequest, userDO.getId());
         return tagDAO.insertTag(tagDO);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        long useCount = accountingTagDAO.selectCountByTagId(id);
+
+        if (useCount > 0) {
+            throw new TagException(TagEnumeration.TAG_IN_USE_CAN_NOT_BE_DELETED);
+        }
+
+        tagDAO.deleteById(id);
     }
 
     @Override
