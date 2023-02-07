@@ -1,94 +1,53 @@
-package com.nero.hua.service.impl;
+package com.nero.hua.controller;
 
-import com.nero.hua.bean.AccountingDO;
-import com.nero.hua.bean.AccountingTagDO;
-import com.nero.hua.bean.TagDO;
-import com.nero.hua.bean.UserDO;
-import com.nero.hua.convert.AccountingConvert;
-import com.nero.hua.convert.AccountingTagConvert;
-import com.nero.hua.convert.TagConvert;
-import com.nero.hua.dao.AccountingDAO;
-import com.nero.hua.dao.AccountingTagDAO;
-import com.nero.hua.dao.TagDAO;
-import com.nero.hua.dao.UserDAO;
 import com.nero.hua.model.accounting.AccountingAddRequest;
 import com.nero.hua.model.accounting.AccountingPageRequest;
 import com.nero.hua.model.accounting.AccountingResponse;
 import com.nero.hua.model.accounting.AccountingTagListRequest;
 import com.nero.hua.model.base.BasePageResponse;
+import com.nero.hua.model.base.BaseResponse;
 import com.nero.hua.model.tag.TagResponse;
 import com.nero.hua.service.AccountingService;
+import com.nero.hua.util.LoginUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-public class AccountingServiceImpl implements AccountingService {
+@RestController
+@RequestMapping("accounting")
+public class AccountingController {
 
     @Autowired
-    private AccountingDAO accountingDAO;
+    AccountingService accountingService;
 
-    @Autowired
-    private AccountingTagDAO accountingTagDAO;
+    @PostMapping
+    public BaseResponse<Long> add(@RequestBody @Validated AccountingAddRequest accountingAddRequest, HttpServletRequest httpServletRequest) {
+        String userId = LoginUtil.parseUserIdFromHttpServletRequest(httpServletRequest);
+        Long id = accountingService.add(accountingAddRequest, userId);
 
-    @Autowired
-    private UserDAO userDAO;
-
-    @Autowired
-    private TagDAO tagDAO;
-
-    @Override
-    @Transactional
-    public Long add(AccountingAddRequest accountingAddRequest, String userId) {
-        UserDO userDO = userDAO.selectByUserId(userId);
-        AccountingDO accountingDO = AccountingConvert.convertRequestToDO(accountingAddRequest, userDO.getId());
-        long accountingDOId = accountingDAO.insertAccounting(accountingDO);
-
-        List<Long> tagIdList = accountingAddRequest.getTagIdList();
-        if (CollectionUtils.isEmpty(tagIdList)) {
-            return accountingDOId;
-        }
-
-        for (long tagId : tagIdList) {
-            AccountingTagDO accountingTagDO = AccountingTagConvert.convertDO(userDO.getId(), accountingDOId, tagId);
-            accountingTagDAO.insertAccountingTag(accountingTagDO);
-        }
-
-        return accountingDOId;
+        return new BaseResponse<>(id);
     }
 
-    @Override
-    public AccountingResponse get(Long id) {
-        AccountingDO accountingDO = accountingDAO.selectById(id);
-        return AccountingConvert.convertDOToResponse(accountingDO);
+    @GetMapping(value = "/detail/{id}")
+    public BaseResponse<AccountingResponse> get(@PathVariable(name = "id") Long id) {
+        AccountingResponse accountingResponse = accountingService.get(id);
+
+        return new BaseResponse<>(accountingResponse);
     }
 
-    @Override
-    public BasePageResponse<AccountingResponse> selectByPage(AccountingPageRequest accountingPageRequest) {
-        Long totalCount = accountingDAO.selectCountByPage(accountingPageRequest);
-        List<AccountingDO> accountingDOList = accountingDAO.selectListByPage(accountingPageRequest, accountingPageRequest.calculateBegin());
-
-        List<AccountingResponse> newsResponseList = AccountingConvert.convertDOToResponse(accountingDOList);
-
-        return new BasePageResponse<>(totalCount, newsResponseList);
+    @GetMapping(value = "/list")
+    public BaseResponse<BasePageResponse<AccountingResponse>> selectAccountingByPage(@Validated AccountingPageRequest accountingPageRequest) {
+        BasePageResponse<AccountingResponse> accountingPageResponse = accountingService.selectByPage(accountingPageRequest);
+        return new BaseResponse(accountingPageResponse);
     }
 
-    @Override
-    public List<TagResponse> selectAccountingTagList(AccountingTagListRequest accountingTagRequest) {
-        List<AccountingTagDO> accountingTagDOList = accountingTagDAO.selectListByAccountingId(accountingTagRequest.getId());
-
-        if (CollectionUtils.isEmpty(accountingTagDOList)) {
-            return null;
-        }
-
-        List<TagDO> tagDOList = new ArrayList<>();
-        for (AccountingTagDO accountingTagDO : accountingTagDOList) {
-            tagDOList.add(tagDAO.selectById(accountingTagDO.getTagId()));
-        }
-
-        return TagConvert.convertDOToResponse(tagDOList);
+    @GetMapping(value = "/tag/list")
+    public BaseResponse<List<TagResponse>> selectAccountingTagList(@Validated AccountingTagListRequest accountingTagRequest) {
+        List<TagResponse> tagListResponse = accountingService.selectAccountingTagList(accountingTagRequest);
+        return new BaseResponse(tagListResponse);
     }
 
 }
