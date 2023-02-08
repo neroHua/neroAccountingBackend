@@ -43,7 +43,9 @@ public class AccountingServiceImpl implements AccountingService {
     public Long add(AccountingAddRequest accountingAddRequest, String userId) {
         UserDO userDO = userDAO.selectByUserId(userId);
         AccountingDO accountingDO = AccountingConvert.convertRequestToDO(accountingAddRequest, userDO.getId());
-        long accountingDOId = accountingDAO.insertAccounting(accountingDO);
+        accountingDAO.insertAccounting(accountingDO);
+
+        long accountingDOId = accountingDO.getId();
 
         List<Long> tagIdList = accountingAddRequest.getTagIdList();
         if (CollectionUtils.isEmpty(tagIdList)) {
@@ -88,8 +90,21 @@ public class AccountingServiceImpl implements AccountingService {
     }
 
     @Override
-    public List<TagResponse> selectAccountingTagList(AccountingTagListRequest accountingTagRequest) {
-        List<AccountingTagDO> accountingTagDOList = accountingTagDAO.selectListByAccountingId(accountingTagRequest.getId());
+    public Long addAccountingTag(AccountingTagAddRequest accountingTagAddRequest, String userId) {
+        UserDO userDO = userDAO.selectByUserId(userId);
+        AccountingTagDO accountingTagDO = AccountingTagConvert.convertRequestToDO(accountingTagAddRequest, userDO.getId());
+        accountingTagDAO.insertAccountingTag(accountingTagDO);
+        return accountingTagDO.getId();
+    }
+
+    @Override
+    public Long deleteAccountingTag(AccountingTagDeleteRequest accountingTagdeleteRequest) {
+        return accountingTagDAO.deleteByAccountingIdAndTagId(accountingTagdeleteRequest.getAccountingId(), accountingTagdeleteRequest.getTagId());
+    }
+
+    @Override
+    public List<TagResponse> selectAccountingTagList(AccountingTagListRequest accountingTagListRequest) {
+        List<AccountingTagDO> accountingTagDOList = accountingTagDAO.selectListByAccountingId(accountingTagListRequest.getId());
 
         if (CollectionUtils.isEmpty(accountingTagDOList)) {
             return null;
