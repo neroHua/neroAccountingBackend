@@ -21,7 +21,7 @@
     bill_money, description, review_description, valuable
   </sql>
 
-  <insert id="insertAccounting" parameterType="com.nero.hua.bean.AccountingDO">
+  <insert id="insertAccounting" parameterType="com.nero.hua.bean.AccountingDO" useGeneratedKeys="true" keyProperty="id">
     insert into
       accounting
       (id, create_time, update_time,
