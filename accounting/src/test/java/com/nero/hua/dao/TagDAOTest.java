@@ -20,7 +20,7 @@ public class TagDAOTest {
     private TagDAO tagDAO;
 
     @Test
-    public void testInsertUser() {
+    public void testCRUD() {
         TagDO tagDO = new TagDO();
         tagDO.setCreateTime(new Date());
         tagDO.setUpdateTime(new Date());
