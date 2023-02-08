@@ -23,7 +23,7 @@
     where id = #{id}
   </select>
 
-  <insert id="insertAccountingTag" parameterType="com.nero.hua.bean.AccountingTagDO">
+  <insert id="insertAccountingTag" parameterType="com.nero.hua.bean.AccountingTagDO" useGeneratedKeys="true" keyProperty="id">
     insert into
       accounting_tag
       (id, create_time, update_time,
