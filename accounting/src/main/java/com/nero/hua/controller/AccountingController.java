@@ -51,14 +51,27 @@ public class AccountingController {
     }
 
     @GetMapping(value = "/list")
-    public BaseResponse<BasePageResponse<AccountingResponse>> selectAccountingByPage(@Validated AccountingPageRequest accountingPageRequest) {
+    public BaseResponse<BasePageResponse<AccountingResponse>> selectAccountingByPage(@RequestBody @Validated AccountingPageRequest accountingPageRequest) {
         BasePageResponse<AccountingResponse> accountingPageResponse = accountingService.selectByPage(accountingPageRequest);
         return new BaseResponse(accountingPageResponse);
     }
 
+    @PostMapping(value = "/tag")
+    public BaseResponse<Long> addAccountingTag(@RequestBody @Validated AccountingTagAddRequest accountingTagAddRequest, HttpServletRequest httpServletRequest) {
+        String userId = LoginUtil.parseUserIdFromHttpServletRequest(httpServletRequest);
+        Long id = accountingService.addAccountingTag(accountingTagAddRequest, userId);
+        return new BaseResponse(id);
+    }
+
+    @DeleteMapping(value = "/tag")
+    public BaseResponse<List<Long>> deleteAccountingTag(@RequestBody @Validated AccountingTagDeleteRequest accountingTagdeleteRequest) {
+        Long count = accountingService.deleteAccountingTag(accountingTagdeleteRequest);
+        return new BaseResponse(count);
+    }
+
     @GetMapping(value = "/tag/list")
-    public BaseResponse<List<TagResponse>> selectAccountingTagList(@Validated AccountingTagListRequest accountingTagRequest) {
-        List<TagResponse> tagListResponse = accountingService.selectAccountingTagList(accountingTagRequest);
+    public BaseResponse<List<TagResponse>> selectAccountingTagList(@RequestBody @Validated AccountingTagListRequest accountingTagListRequest) {
+        List<TagResponse> tagListResponse = accountingService.selectAccountingTagList(accountingTagListRequest);
         return new BaseResponse(tagListResponse);
     }
 
