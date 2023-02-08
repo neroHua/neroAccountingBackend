@@ -42,6 +42,14 @@
       accounting_id = #{accountingId}
   </delete>
 
+  <delete id="deleteByAccountingIdAndTagId">
+    delete from
+      accounting_tag
+    where
+      accounting_id = #{accountingId}
+      and tag_id = #{tagId}
+  </delete>
+
   <select id="selectListByAccountingId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
       <include refid="Base_Column_List" />
