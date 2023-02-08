@@ -18,5 +18,9 @@ public interface AccountingService {
 
     BasePageResponse<AccountingResponse> selectByPage(AccountingPageRequest accountingPageRequest);
 
-    List<TagResponse> selectAccountingTagList(AccountingTagListRequest accountingTagRequest);
+    Long addAccountingTag(AccountingTagAddRequest accountingTagAddRequest, String userId);
+
+    Long deleteAccountingTag(AccountingTagDeleteRequest accountingTagdeleteRequest);
+
+    List<TagResponse> selectAccountingTagList(AccountingTagListRequest accountingTagListRequest);
 }
