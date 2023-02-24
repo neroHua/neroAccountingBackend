@@ -51,7 +51,7 @@ public class AccountingController {
     }
 
     @GetMapping(value = "/list")
-    public BaseResponse<BasePageResponse<AccountingResponse>> selectAccountingByPage(@RequestBody @Validated AccountingPageRequest accountingPageRequest) {
+    public BaseResponse<BasePageResponse<AccountingResponse>> selectAccountingByPage(@Validated AccountingPageRequest accountingPageRequest) {
         BasePageResponse<AccountingResponse> accountingPageResponse = accountingService.selectByPage(accountingPageRequest);
         return new BaseResponse(accountingPageResponse);
     }
@@ -70,7 +70,7 @@ public class AccountingController {
     }
 
     @GetMapping(value = "/tag/list")
-    public BaseResponse<List<TagResponse>> selectAccountingTagList(@RequestBody @Validated AccountingTagListRequest accountingTagListRequest) {
+    public BaseResponse<List<TagResponse>> selectAccountingTagList(@Validated AccountingTagListRequest accountingTagListRequest) {
         List<TagResponse> tagListResponse = accountingService.selectAccountingTagList(accountingTagListRequest);
         return new BaseResponse(tagListResponse);
     }
