@@ -46,6 +46,8 @@ public class TagConvert {
     public static TagResponse convertDOToResponse(TagDO tagDO) {
         TagResponse tagResponse = new TagResponse();
 
+        tagResponse.setId(tagDO.getId());
+
         tagResponse.setCreateUserId(tagDO.getCreateUserId());
         tagResponse.setUpdateUserId(tagDO.getUpdateUserId());
         tagResponse.setCreateTime(tagDO.getCreateTime());
