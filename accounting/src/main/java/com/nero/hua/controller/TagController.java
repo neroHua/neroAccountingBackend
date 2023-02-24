@@ -52,7 +52,7 @@ public class TagController {
     }
 
     @GetMapping(value = "/list")
-    public BaseResponse<BasePageResponse<TagResponse>> selectTagByPage(@RequestBody @Validated TagPageRequest tagPageRequest) {
+    public BaseResponse<BasePageResponse<TagResponse>> selectTagByPage(@Validated TagPageRequest tagPageRequest) {
         BasePageResponse<TagResponse> tagPageResponse = tagService.selectByPage(tagPageRequest);
         return new BaseResponse(tagPageResponse);
     }
