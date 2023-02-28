@@ -97,13 +97,16 @@
       and code like #{tagPageRequest.codeLike}
     </if>
     <if test="tagPageRequest.codeEqual != null">
-      and code like #{tagPageRequest.codeEqual}
+      and code = #{tagPageRequest.codeEqual}
     </if>
     <if test="tagPageRequest.nameLike != null">
       and code like #{tagPageRequest.nameLike}
     </if>
-    <if test="tagPageRequest.nameEqual!= null">
-      and code like #{tagPageRequest.nameEqual}
+    <if test="tagPageRequest.nameEqual != null">
+      and code = #{tagPageRequest.nameEqual}
+    </if>
+    <if test="tagPageRequest.parentId != null">
+      and parent_id = #{tagPageRequest.parentId}
     </if>
   </sql>
 
