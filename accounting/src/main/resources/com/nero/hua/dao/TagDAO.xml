@@ -91,19 +91,19 @@
   <sql id="page_common_condition">
     1 = 1
     <if test="tagPageRequest.keyword != null">
-      and (code like #{tagPageRequest.keyword} or name like #{tagPageRequest.keyword} or description like #{tagPageRequest.keyword})
+      and (code like concat('%', #{tagPageRequest.keyword}, '%') or name like concat('%', #{tagPageRequest.keyword}, '%') or description like concat('%', #{tagPageRequest.keyword}, '%'))
     </if>
     <if test="tagPageRequest.codeLike != null">
-      and code like #{tagPageRequest.codeLike}
+      and code like concat('%', #{tagPageRequest.codeLike}, '%')
     </if>
     <if test="tagPageRequest.codeEqual != null">
       and code = #{tagPageRequest.codeEqual}
     </if>
     <if test="tagPageRequest.nameLike != null">
-      and code like #{tagPageRequest.nameLike}
+      and name like concat('%', #{tagPageRequest.nameLike}, '%')
     </if>
     <if test="tagPageRequest.nameEqual != null">
-      and code = #{tagPageRequest.nameEqual}
+      and name = #{tagPageRequest.nameEqual}
     </if>
     <if test="tagPageRequest.parentId != null">
       and parent_id = #{tagPageRequest.parentId}
