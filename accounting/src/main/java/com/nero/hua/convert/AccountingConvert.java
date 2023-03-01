@@ -50,6 +50,8 @@ public class AccountingConvert {
     public static AccountingResponse convertDOToResponse(AccountingDO accountingDO) {
         AccountingResponse accountingResponse = new AccountingResponse();
 
+        accountingResponse.setId(accountingDO.getId());
+
         accountingResponse.setCreateUserId(accountingDO.getCreateUserId());
         accountingResponse.setUpdateUserId(accountingDO.getUpdateUserId());
         accountingResponse.setCreateTime(accountingDO.getCreateTime());
