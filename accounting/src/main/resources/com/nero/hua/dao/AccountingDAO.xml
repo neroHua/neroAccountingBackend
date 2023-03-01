@@ -96,7 +96,7 @@
   <sql id="page_common_condition">
     1 = 1
     <if test="accountingPageRequest.keyword != null">
-      and (review_description like #{accountingPageRequest.keyword} or description like #{accountingPageRequest.keyword})
+      and (review_description like concat('%', #{accountingPageRequest.keyword}, '%') or description like concat('%', #{accountingPageRequest.keyword}, '%'))
     </if>
     <if test="accountingPageRequest.billCreateTimeMin != null">
       <![CDATA[
