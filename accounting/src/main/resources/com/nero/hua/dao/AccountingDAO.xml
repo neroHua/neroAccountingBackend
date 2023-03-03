@@ -186,7 +186,7 @@
 
   <select id="getTotalMoneyForEveryday" resultMap="TotalMoneyForEverydayResponse">
     select
-      date_format(bill_create_time, '%Y%m%e') as day, sum(bill_money) as money
+      date_format(bill_create_time, '%Y%m%d') as day, sum(bill_money) as money
     from
       accounting
     where
@@ -216,7 +216,7 @@
             and valuable = #{totalMoneyForEverydayRequest.valuable}
           ]]>
       </if>
-    group by date_format(bill_create_time, '%Y%m%e')
+    group by date_format(bill_create_time, '%Y%m%d')
   </select>
 
 </mapper>
