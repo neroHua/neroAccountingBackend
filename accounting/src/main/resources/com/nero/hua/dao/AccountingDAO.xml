@@ -16,6 +16,11 @@
     <result column="valuable" jdbcType="BIT" property="valuable" />
   </resultMap>
 
+  <resultMap id="TotalMoneyForEveryMonthResponse" type="com.nero.hua.model.statisticsAndAnalysis.TotalMoneyForEveryMonthResponse">
+    <result column="money" jdbcType="DOUBLE" property="money" />
+    <result column="month" jdbcType="VARCHAR" property="month" />
+  </resultMap>
+
   <sql id="Base_Column_List">
     id, create_time, update_time, create_user_id, update_user_id, user_id, bill_create_time, 
     bill_money, description, review_description, valuable
@@ -137,6 +142,41 @@
     desc
     limit
       #{begin}, #{accountingPageRequest.pageSize}
+  </select>
+
+  <select id="getTotalMoneyForEveryMonth" resultMap="TotalMoneyForEveryMonthResponse">
+    select
+      date_format(bill_create_time, '%Y%m') as month, sum(bill_money) as money
+    from
+    accounting
+    where
+      1 = 1
+      <if test="totalMoneyForEveryMonthRequest.billCreateTimeMin != null">
+        <![CDATA[
+          and bill_create_time >= #{totalMoneyForEveryMonthRequest.billCreateTimeMin}
+        ]]>
+      </if>
+      <if test="totalMoneyForEveryMonthRequest.billCreateTimeMax != null">
+        <![CDATA[
+          and bill_create_time <= #{totalMoneyForEveryMonthRequest.billCreateTimeMax}
+        ]]>
+      </if>
+      <if test="totalMoneyForEveryMonthRequest.billMoneyMin != null">
+        <![CDATA[
+          and bill_money >= #{totalMoneyForEveryMonthRequest.billMoneyMin}
+        ]]>
+      </if>
+      <if test="totalMoneyForEveryMonthRequest.billMoneyMax != null">
+        <![CDATA[
+          and bill_money <= #{totalMoneyForEveryMonthRequest.billMoneyMax}
+        ]]>
+      </if>
+      <if test="totalMoneyForEveryMonthRequest.valuable != null">
+        <![CDATA[
+          and valuable = #{totalMoneyForEveryMonthRequest.valuable}
+        ]]>
+      </if>
+    group by date_format(bill_create_time, '%Y%m')
   </select>
 
 </mapper>
