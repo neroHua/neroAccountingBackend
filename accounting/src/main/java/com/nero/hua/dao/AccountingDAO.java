@@ -4,6 +4,8 @@ import com.nero.hua.bean.AccountingDO;
 import com.nero.hua.model.accounting.AccountingPageRequest;
 import com.nero.hua.model.statisticsAndAnalysis.TotalMoneyForEveryMonthRequest;
 import com.nero.hua.model.statisticsAndAnalysis.TotalMoneyForEveryMonthResponse;
+import com.nero.hua.model.statisticsAndAnalysis.TotalMoneyForEverydayRequest;
+import com.nero.hua.model.statisticsAndAnalysis.TotalMoneyForEverydayResponse;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -23,4 +25,6 @@ public interface AccountingDAO {
     List<AccountingDO> selectListByPage(@Param("accountingPageRequest") AccountingPageRequest accountingPageRequest, @Param("begin") Long calculateBegin);
 
     List<TotalMoneyForEveryMonthResponse> getTotalMoneyForEveryMonth(@Param("totalMoneyForEveryMonthRequest") TotalMoneyForEveryMonthRequest totalMoneyForEveryMonthRequest);
+
+    List<TotalMoneyForEverydayResponse> getTotalMoneyForEveryday(@Param("totalMoneyForEverydayRequest") TotalMoneyForEverydayRequest totalMoneyForEverydayRequest);
 }
