@@ -10,6 +10,8 @@ public interface AccountingService {
 
     Long add(AccountingAddRequest accountingAddRequest, String userId);
 
+    Long addList(List<AccountingAddRequest> accountingAddRequestList, String userId);
+
     Long deleteById(Long id);
 
     Long updateById(AccountingUpdateRequest accountingUpdateRequest, String userId);
