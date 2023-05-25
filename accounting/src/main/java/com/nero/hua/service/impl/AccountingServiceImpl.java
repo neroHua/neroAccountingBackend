@@ -61,6 +61,15 @@ public class AccountingServiceImpl implements AccountingService {
     }
 
     @Override
+    @Transactional
+    public Long addList(List<AccountingAddRequest> accountingAddRequestList, String userId) {
+        for (AccountingAddRequest accountingAddRequest : accountingAddRequestList) {
+            add(accountingAddRequest, userId);
+        }
+        return null;
+    }
+
+    @Override
     public Long deleteById(Long id) {
         accountingTagDAO.deleteByAccountingId(id);
         return accountingDAO.deleteById(id);
