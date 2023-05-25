@@ -28,6 +28,14 @@ public class AccountingController {
         return new BaseResponse<>(id);
     }
 
+    @PostMapping(value = "/list")
+    public BaseResponse<Long> addList(@RequestBody @Validated List<AccountingAddRequest> accountingAddRequestList, HttpServletRequest httpServletRequest) {
+        String userId = LoginUtil.parseUserIdFromHttpServletRequest(httpServletRequest);
+        Long id = accountingService.addList(accountingAddRequestList, userId);
+
+        return new BaseResponse<>(id);
+    }
+
     @DeleteMapping(value = "/{id}")
     public BaseResponse<Long> delete(@PathVariable(name = "id") Long id) {
         Long changeCount = accountingService.deleteById(id);
